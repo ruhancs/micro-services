@@ -12,7 +12,7 @@ import (
 	_ "github.com/lib/pq" //driver postgres
 )
 
-const webPort = "81"
+const webPort = "80"
 
 var counts int64
 
