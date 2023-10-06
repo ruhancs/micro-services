@@ -5,7 +5,9 @@ import (
 	"fmt"
 	"log"
 	"logger-service/data"
+	"net"
 	"net/http"
+	"net/rpc"
 	"time"
 
 	"go.mongodb.org/mongo-driver/mongo"
@@ -49,7 +51,10 @@ func main() {
 		Models: data.New(client),
 	}
 
-	//go app.serve()
+	//rpc server, registrar rpc server
+	err = rpc.Register(new(RPCServer))
+	go app.rpcListen()
+
 	log.Println("starting log service on port: ",webPort)
 	srv := &http.Server{
 		Addr: fmt.Sprintf(":%s", webPort),
@@ -62,15 +67,20 @@ func main() {
 	}
 }
 
-func (app *Config) serve() {
-	srv := &http.Server{
-		Addr: fmt.Sprintf(":%s", webPort),
-		Handler: app.routes(),
-	}
-
-	err := srv.ListenAndServe()
+func (app *Config) rpcListen() error {
+	log.Println("starting rpc server on port: ",webPort)
+	listen,err := net.Listen("tcp", fmt.Sprintf("0.0.0.0:%s",rpcPort))
 	if err != nil {
-		log.Panic(err)
+		return err
+	}
+	defer listen.Close()
+
+	for {
+		rpcConn,err := listen.Accept()
+		if err != nil {
+			continue
+		}
+		go rpc.ServeConn(rpcConn)
 	}
 }
 

@@ -8,5 +8,6 @@
 FROM alpine:3.18
 WORKDIR /app
 COPY mailApp /app
+COPY templates /templates
 
 CMD [ "/app/mailApp" ]
