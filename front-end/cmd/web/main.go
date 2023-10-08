@@ -40,6 +40,8 @@ func render(w http.ResponseWriter, t string) {
 		return
 	}
 
+	//inserir url do broker-service, para inserir na template
+
 	if err := tmpl.Execute(w, nil); err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 	}

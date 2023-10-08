@@ -40,7 +40,7 @@ build_listener:
 ## build_mail: builds the broker binary as a linux executable
 build_mail:
 	@echo "Building mail binary..."
-	cd mail-service && env GOOS=linux CGO_ENABLED=0 go build -o ${MAIL_BINARY} ./cmd/api
+	cd mailer-service && env GOOS=linux CGO_ENABLED=0 go build -o ${MAIL_BINARY} ./cmd/api
 	@echo "Done!"
 
 ## build_logger: builds the broker binary as a linux executable
